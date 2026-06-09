@@ -1,0 +1,67 @@
+bundle:
+  name: ecommerce-lakehouse
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: ${var.workspace_host}
+
+  prod:
+    mode: production
+    workspace:
+      host: ${var.workspace_host}
+
+variables:
+  workspace_host:
+    description: Databricks workspace URL
+  email:
+    description: Notification email
+
+resources:
+  jobs:
+    ecommerce_lakehouse_pipeline:
+      name: ecommerce-lakehouse-pipeline
+      email_notifications:
+        on_failure:
+          - ${var.email}
+      tasks:
+        - task_key: bronze
+          notebook_task:
+            notebook_path: ./notebooks/bronze.py
+            source: WORKSPACE
+          job_cluster_key: main_cluster
+
+        - task_key: silver
+          notebook_task:
+            notebook_path: ./notebooks/silver.py
+            source: WORKSPACE
+          job_cluster_key: main_cluster
+          depends_on:
+            - task_key: bronze
+
+        - task_key: gold
+          notebook_task:
+            notebook_path: ./notebooks/gold.py
+            source: WORKSPACE
+          job_cluster_key: main_cluster
+          depends_on:
+            - task_key: silver
+
+        - task_key: ml
+          notebook_task:
+            notebook_path: ./notebooks/ml.py
+            source: WORKSPACE
+          job_cluster_key: main_cluster
+          depends_on:
+            - task_key: gold
+
+      job_clusters:
+        - job_cluster_key: main_cluster
+          new_cluster:
+            spark_version: 15.4.x-scala2.12
+            node_type_id: Standard_DS3_v2
+            num_workers: 1
+            spark_conf:
+              spark.sql.shuffle.partitions: "8"
