@@ -6,16 +6,14 @@ targets:
     mode: development
     default: true
     workspace:
-      host: ${var.workspace_host}
+      host: ${env.DATABRICKS_HOST}
 
   prod:
     mode: production
     workspace:
-      host: ${var.workspace_host}
+      host: ${env.DATABRICKS_HOST}
 
 variables:
-  workspace_host:
-    description: Databricks workspace URL
   email:
     description: Notification email
 
