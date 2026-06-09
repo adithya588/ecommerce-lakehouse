@@ -4,23 +4,7 @@ An end-to-end data engineering portfolio project built on Azure Databricks demon
 
 ---
 
-## Architecture
 
-DummyJSON REST API ──────────────────────────┐
-├──► Bronze (Raw Delta)
-Faker-generated Orders ──► Auto Loader ───────┘
-│
-▼
-Silver (Cleaned + DQ)
-│
-▼
-Gold (Business KPIs)
-│
-▼
-ML (Churn Prediction)
-│
-▼
-Power BI Dashboard
 
 
 ## Data Sources
