@@ -49,7 +49,7 @@ Raw ingestion layer — API responses stored as JSON strings, orders ingested vi
 ## CI/CD
 
 - **Databricks Asset Bundles** — all jobs defined as code in `databricks.yml`
-- **GitHub Actions** — automated deployment to prod on every push to `main`
+- **GitHub Actions** — deployment workflow configured to trigger on push to `main` using `DATABRICKS_HOST` and `DATABRICKS_TOKEN` secrets
 - **Targets** — `dev` and `prod` environments configured
 
 ---
